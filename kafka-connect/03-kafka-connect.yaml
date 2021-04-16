@@ -1,313 +1,44 @@
-###########
-# Kafka Connect
-###########
-
-# Topics
----
-apiVersion: kafka.strimzi.io/v1beta1
-kind: KafkaTopic
-metadata:
-  name: telegram-topic
-  labels:
-    strimzi.io/cluster: my-cluster
-spec:
-  partitions: 1
-  replicas: 1
----
-
-# Connect User
-apiVersion: kafka.strimzi.io/v1alpha1
-kind: KafkaUser
-metadata:
-  name: my-connect-cluster
-  labels:
-    strimzi.io/cluster: my-cluster
-spec:
-  authentication:
-    type: tls
-  authorization:
-    type: simple
-    acls:
-    # Kafka Connects internal topics
-    - resource:
-        type: group
-        name: connect-cluster
-      operation: Read
-    - resource:
-        type: topic
-        name: connect-cluster-configs
-      operation: Read
-    - resource:
-        type: topic
-        name: connect-cluster-configs
-      operation: Describe
-    - resource:
-        type: topic
-        name: connect-cluster-configs
-      operation: Write
-    - resource:
-        type: topic
-        name: connect-cluster-configs
-      operation: Describe
-    - resource:
-        type: topic
-        name: connect-cluster-configs
-      operation: Create
-    - resource:
-        type: topic
-        name: connect-cluster-status
-      operation: Read
-    - resource:
-        type: topic
-        name: connect-cluster-status
-      operation: Describe
-    - resource:
-        type: topic
-        name: connect-cluster-status
-      operation: Write
-    - resource:
-        type: topic
-        name: connect-cluster-status
-      operation: Describe
-    - resource:
-        type: topic
-        name: connect-cluster-status
-      operation: Create
-    - resource:
-        type: topic
-        name: connect-cluster-offsets
-      operation: Read
-    - resource:
-        type: topic
-        name: connect-cluster-offsets
-      operation: Describe
-    - resource:
-        type: topic
-        name: connect-cluster-offsets
-      operation: Write
-    - resource:
-        type: topic
-        name: connect-cluster-offsets
-      operation: Describe
-    - resource:
-        type: topic
-        name: connect-cluster-offsets
-      operation: Create
-    # Connector topics
-    - resource:
-        type: group
-        name: connect-
-        patternType: prefix
-      operation: Read
-    - resource:
-        type: topic
-        name: telegram-topic
-      operation: Read
-    - resource:
-        type: topic
-        name: telegram-topic
-      operation: Describe
-    - resource:
-        type: topic
-        name: telegram-topic
-      operation: Write
-    - resource:
-        type: topic
-        name: telegram-topic
-      operation: Create
----
-# Connect User
-apiVersion: kafka.strimzi.io/v1alpha1
-kind: KafkaUser
-metadata:
-  name: my-second-connect-cluster
-  labels:
-    strimzi.io/cluster: my-cluster
-spec:
-  authentication:
-    type: tls
-  authorization:
-    type: simple
-    acls:
-    # Kafka Connects internal topics
-    - resource:
-        type: group
-        name: second-connect-cluster
-      operation: Read
-    - resource:
-        type: topic
-        name: second-connect-cluster-configs
-      operation: Read
-    - resource:
-        type: topic
-        name: second-connect-cluster-configs
-      operation: Describe
-    - resource:
-        type: topic
-        name: second-connect-cluster-configs
-      operation: Write
-    - resource:
-        type: topic
-        name: second-connect-cluster-configs
-      operation: Describe
-    - resource:
-        type: topic
-        name: second-connect-cluster-configs
-      operation: Create
-    - resource:
-        type: topic
-        name: second-connect-cluster-status
-      operation: Read
-    - resource:
-        type: topic
-        name: second-connect-cluster-status
-      operation: Describe
-    - resource:
-        type: topic
-        name: second-connect-cluster-status
-      operation: Write
-    - resource:
-        type: topic
-        name: second-connect-cluster-status
-      operation: Describe
-    - resource:
-        type: topic
-        name: second-connect-cluster-status
-      operation: Create
-    - resource:
-        type: topic
-        name: second-connect-cluster-offsets
-      operation: Read
-    - resource:
-        type: topic
-        name: second-connect-cluster-offsets
-      operation: Describe
-    - resource:
-        type: topic
-        name: second-connect-cluster-offsets
-      operation: Write
-    - resource:
-        type: topic
-        name: second-connect-cluster-offsets
-      operation: Describe
-    - resource:
-        type: topic
-        name: second-connect-cluster-offsets
-      operation: Create
-    # Connector topics
-    - resource:
-        type: group
-        name: connect-
-        patternType: prefix
-      operation: Read
-    - resource:
-        type: topic
-        name: telegram-topic
-      operation: Read
-    - resource:
-        type: topic
-        name: telegram-topic
-      operation: Describe
-    - resource:
-        type: topic
-        name: telegram-topic
-      operation: Write
-    - resource:
-        type: topic
-        name: telegram-topic
-      operation: Create
----
-
-# Connect
-apiVersion: kafka.strimzi.io/v1alpha1
+apiVersion: kafka.strimzi.io/v1beta2
 kind: KafkaConnect
 metadata:
   name: my-connect-cluster
-  labels:
-    app: my-connect-cluster
   annotations:
+    #  # use-connector-resources configures this KafkaConnect
+    #  # to use KafkaConnector resources to avoid
+    #  # needing to call the Connect REST API directly
     strimzi.io/use-connector-resources: "true"
 spec:
-  image: quay.io/kafka-enablement-2020/kafka-connect-camel:latest
+  version: 2.7.0
   replicas: 1
-  resources:
-    requests:
-      memory: 4Gi
-    limits:
-      memory: 4Gi
+  build:
+    output:
+      type: docker
+      image: image-registry.openshift-image-registry.svc:5000/myproject/connect-build:latest
+    plugins:
+      - name: gs-connector
+        artifacts:
+          - type: tgz
+            url: https://github.com/sknot-rh/google-sheet-source-connector/archive/refs/tags/0.0.1.tar.gz
   bootstrapServers: my-cluster-kafka-bootstrap:9093
   tls:
     trustedCertificates:
-    - secretName: my-cluster-cluster-ca-cert
-      certificate: ca.crt
-  authentication:
-    type: tls
-    certificateAndKey:
-      secretName: my-connect-cluster
-      certificate: user.crt
-      key: user.key
+      - secretName: my-cluster-cluster-ca-cert
+        certificate: ca.crt
   externalConfiguration:
     volumes:
-      - name: telegram-credentials
+      - name: google-sheet-credentials
         secret:
-          secretName: telegram-credentials
-      #- name: aws-credentials
-      #  secret:
-      #    secretName: aws-credentials
+          secretName: google-sheet-credentials
   config:
-    config.providers: file
-    config.providers.file.class: org.apache.kafka.common.config.provider.FileConfigProvider
-    key.converter: org.apache.kafka.connect.json.JsonConverter
-    value.converter: org.apache.kafka.connect.json.JsonConverter
+    group.id: connect-cluster
+    offset.storage.topic: connect-cluster-offsets
+    config.storage.topic: connect-cluster-configs
+    status.storage.topic: connect-cluster-status
+    # -1 means it will use the default replication factor configured in the broker
+    config.storage.replication.factor: -1
+    offset.storage.replication.factor: -1
+    status.storage.replication.factor: -1
+    key.converter: org.apache.kafka.connect.storage.StringConverter
+    value.converter: org.apache.kafka.connect.storage.StringConverter
     key.converter.schemas.enable: false
     value.converter.schemas.enable: false
----
-
-# Connect
-apiVersion: kafka.strimzi.io/v1alpha1
-kind: KafkaConnect
-metadata:
-  name: my-second-connect-cluster
-  labels:
-    app: my-second-connect-cluster
-  annotations:
-    strimzi.io/use-connector-resources: "true"
-spec:
-  image: sknot/telegram-chatbot-sink:latest
-  replicas: 1
-  resources:
-    requests:
-      memory: 4Gi
-    limits:
-      memory: 4Gi
-  bootstrapServers: my-cluster-kafka-bootstrap:9093
-  tls:
-    trustedCertificates:
-    - secretName: my-cluster-cluster-ca-cert
-      certificate: ca.crt
-  authentication:
-    type: tls
-    certificateAndKey:
-      secretName: my-second-connect-cluster
-      certificate: user.crt
-      key: user.key
-  externalConfiguration:
-    volumes:
-      - name: telegram-credentials
-        secret:
-          secretName: telegram-credentials
-      - name: brainshop-credentials
-        secret:
-          secretName: brainshop-credentials
-  config:
-    config.providers: file
-    config.providers.file.class: org.apache.kafka.common.config.provider.FileConfigProvider
-    key.converter: org.apache.kafka.connect.json.JsonConverter
-    value.converter: org.apache.kafka.connect.json.JsonConverter
-    key.converter.schemas.enable: false
-    value.converter.schemas.enable: false
-    group.id: second-connect-cluster
-    offset.storage.topic: second-connect-cluster-offsets
-    config.storage.topic: second-connect-cluster-configs
-    status.storage.topic: second-connect-cluster-status
----
