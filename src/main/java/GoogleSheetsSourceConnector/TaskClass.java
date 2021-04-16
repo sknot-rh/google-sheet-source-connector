@@ -41,6 +41,7 @@ public class TaskClass extends SourceTask {
     public List<SourceRecord> poll() throws InterruptedException {
         try {
             Response res = fetchDataFromApi();
+            LOG.info("Recieved {}", res.body().string());
             JsonObject jo = new JsonObject();
             jo.put("values", res.body().string());
             buildSourceRecord(jo);
