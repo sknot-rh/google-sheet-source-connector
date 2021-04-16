@@ -2,8 +2,8 @@ package GoogleSheetsSourceConnector;
 
 import org.apache.kafka.common.config.AbstractConfig;
 import org.apache.kafka.common.config.ConfigDef;
-import org.apache.kafka.connect.sink.SinkConnector;
 import org.apache.kafka.connect.connector.Task;
+import org.apache.kafka.connect.source.SourceConnector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,8 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GoogleSheetsSource extends SinkConnector {
-    private static final Logger LOG = LoggerFactory.getLogger(SinkConnector.class);
+public class GoogleSheetsSource extends SourceConnector {
+    private static final Logger LOG = LoggerFactory.getLogger(GoogleSheetsSource.class);
     public static final String RANGE = "range";
     public static final String SPREAD_SHEET_ID = "spreadSheetId";
     public static final String ACCESS_TOKEN = "acessToken";
