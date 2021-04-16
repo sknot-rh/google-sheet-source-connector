@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: google-sheet-credentials
+type: Opaque
+data:
+  google-sheet.properties: base64
