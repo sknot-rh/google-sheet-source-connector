@@ -34,7 +34,7 @@ public class GoogleSheetsSourceConnector extends SourceConnector {
 
     @Override
     public String version() {
-        return "0.0.7";
+        return "0.0.8";
     }
 
     @Override
