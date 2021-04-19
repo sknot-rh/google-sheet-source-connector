@@ -12,8 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GoogleSheetsSource extends SourceConnector {
-    private static final Logger LOG = LoggerFactory.getLogger(GoogleSheetsSource.class);
+public class GoogleSheetsSourceConnector extends SourceConnector {
+    private static final Logger LOG = LoggerFactory.getLogger(GoogleSheetsSourceConnector.class);
     public static final String RANGE = "range";
     public static final String SPREAD_SHEET_ID = "spreadSheetId";
     public static final String ACCESS_TOKEN = "accessToken";
@@ -34,7 +34,7 @@ public class GoogleSheetsSource extends SourceConnector {
 
     @Override
     public String version() {
-        return "1.0.0";
+        return "0.0.7";
     }
 
     @Override
@@ -49,7 +49,7 @@ public class GoogleSheetsSource extends SourceConnector {
 
     @Override
     public Class<? extends Task> taskClass() {
-        return GoogleSourceTask.class;
+        return GoogleSheetsSourceTask.class;
     }
 
     @Override

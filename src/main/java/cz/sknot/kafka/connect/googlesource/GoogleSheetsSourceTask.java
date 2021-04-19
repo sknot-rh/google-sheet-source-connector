@@ -13,9 +13,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class GoogleSourceTask extends SourceTask {
-    private static final Logger LOG = LoggerFactory.getLogger(GoogleSourceTask.class);
-
+public class GoogleSheetsSourceTask extends SourceTask {
+    private static final Logger LOG = LoggerFactory.getLogger(GoogleSheetsSourceTask.class);
 
     private String spreadSheetId;
     private String range;
@@ -25,16 +24,16 @@ public class GoogleSourceTask extends SourceTask {
 
     @Override
     public String version() {
-        return new GoogleSheetsSource().version();
+        return new GoogleSheetsSourceConnector().version();
     }
 
     @Override
     public void start(Map<String, String> props) {
-        range = props.get(GoogleSheetsSource.RANGE);
-        spreadSheetId = props.get(GoogleSheetsSource.SPREAD_SHEET_ID);
-        accessToken = props.get(GoogleSheetsSource.ACCESS_TOKEN);
-        topic = props.get(GoogleSheetsSource.TOPIC);
-        delay = Integer.parseInt(props.get(GoogleSheetsSource.DELAY));
+        range = props.get(GoogleSheetsSourceConnector.RANGE);
+        spreadSheetId = props.get(GoogleSheetsSourceConnector.SPREAD_SHEET_ID);
+        accessToken = props.get(GoogleSheetsSourceConnector.ACCESS_TOKEN);
+        topic = props.get(GoogleSheetsSourceConnector.TOPIC);
+        delay = Integer.parseInt(props.get(GoogleSheetsSourceConnector.DELAY));
     }
 
     @Override
