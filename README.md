@@ -24,9 +24,9 @@ and sent to the Kafka Topic.
     - ```
       kubectl apply -f kafka-connect/00-google-sheet-creds.yaml
       kubectl apply -f kafka-connect/01-kafka-connect.yaml
-      kubectl apply -f kafka-connect/01-google-sheet-connector.yaml
+      kubectl apply -f kafka-connect/02-google-sheet-connector.yaml
       ```
-* Now you should see the content of Google Sheet sheet as a JSON in your Kafka Topic. You can check it by 
+* Now you should see the content of Google Sheet as a JSON in your Kafka Topic. You can check it by 
     ```
     kubectl exec -ti my-cluster-kafka-1 -- bash bin/kafka-console-consumer.sh --topic my-topic --from-beginning --bootstrap-server localhost:9092
     ```
