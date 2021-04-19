@@ -1,4 +1,4 @@
-package GoogleSheetsSourceConnector;
+package cz.sknot.kafka.connect.googlesource;
 
 import org.apache.kafka.common.config.AbstractConfig;
 import org.apache.kafka.common.config.ConfigDef;
@@ -49,7 +49,7 @@ public class GoogleSheetsSource extends SourceConnector {
 
     @Override
     public Class<? extends Task> taskClass() {
-        return TaskClass.class;
+        return GoogleSourceTask.class;
     }
 
     @Override

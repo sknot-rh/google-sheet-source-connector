@@ -1,4 +1,4 @@
-package GoogleSheetsSourceConnector;
+package cz.sknot.kafka.connect.googlesource;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -13,8 +13,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class TaskClass extends SourceTask {
-    private static final Logger LOG = LoggerFactory.getLogger(TaskClass.class);
+public class GoogleSourceTask extends SourceTask {
+    private static final Logger LOG = LoggerFactory.getLogger(GoogleSourceTask.class);
 
 
     private String spreadSheetId;
