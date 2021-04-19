@@ -43,7 +43,6 @@ public class GoogleSheetsSourceTask extends SourceTask {
             Response res = fetchDataFromApi();
             String tex = res.body().string();
             res.close();
-            LOG.info("Recieved {}", tex);
             return Collections.singletonList(buildSourceRecord(tex));
         } catch (Exception e) {
             e.printStackTrace();

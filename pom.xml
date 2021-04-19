@@ -6,7 +6,7 @@
 
     <groupId>sknot</groupId>
     <artifactId>google-sheet-source-connector</artifactId>
-    <version>0.0.7</version>
+    <version>0.0.9</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>

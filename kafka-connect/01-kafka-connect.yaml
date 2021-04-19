@@ -17,8 +17,8 @@ spec:
     plugins:
       - name: gs-connector
         artifacts:
-          - type: tgz
-            url: https://github.com/sknot-rh/google-sheet-source-connector/archive/refs/tags/0.0.8.tar.gz
+          - type: jar
+            url: https://github.com/sknot-rh/google-sheet-source-connector/releases/download/0.0.9/google-sheet-source-connector-0.0.9.jar
   bootstrapServers: my-cluster-kafka-bootstrap:9093
   tls:
     trustedCertificates:
@@ -47,4 +47,4 @@ spec:
   logging:
     type: inline
     loggers:
-      log4j.rootLogger: "DEBUG"
+      log4j.rootLogger: "INFO"

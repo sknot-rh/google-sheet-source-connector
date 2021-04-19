@@ -9,7 +9,7 @@ metadata:
     # set to true.
     strimzi.io/cluster: my-connect-cluster
 spec:
-  class: GoogleSource
+  class: GoogleSheetsSourceConnector
   tasksMax: 1
   config:
     spreadSheetId: 1A-RikPJcaC3L4-pkvYyPWp6z6g98NF0r1loYTdEmnYw
