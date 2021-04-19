@@ -4,4 +4,4 @@ metadata:
   name: google-sheet-credentials
 type: Opaque
 data:
-  google-sheet.properties: base64
+  google-sheet.properties: base64==

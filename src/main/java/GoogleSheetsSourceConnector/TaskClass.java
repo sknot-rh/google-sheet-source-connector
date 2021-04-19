@@ -1,7 +1,5 @@
 package GoogleSheetsSourceConnector;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.vertx.core.json.JsonObject;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -11,18 +9,19 @@ import org.apache.kafka.connect.source.SourceTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 public class TaskClass extends SourceTask {
     private static final Logger LOG = LoggerFactory.getLogger(TaskClass.class);
-    private final ObjectMapper mapper = new ObjectMapper();
 
 
     private String spreadSheetId;
     private String range;
     private String accessToken;
     private String topic;
+    private Integer delay;
 
     @Override
     public String version() {
@@ -35,20 +34,22 @@ public class TaskClass extends SourceTask {
         spreadSheetId = props.get(GoogleSheetsSource.SPREAD_SHEET_ID);
         accessToken = props.get(GoogleSheetsSource.ACCESS_TOKEN);
         topic = props.get(GoogleSheetsSource.TOPIC);
+        delay = Integer.parseInt(props.get(GoogleSheetsSource.DELAY));
     }
 
     @Override
-    public List<SourceRecord> poll() throws InterruptedException {
+    public List<SourceRecord> poll() {
         try {
+            Thread.sleep(delay);
             Response res = fetchDataFromApi();
-            LOG.info("Recieved {}", res.body().string());
-            JsonObject jo = new JsonObject();
-            jo.put("values", res.body().string());
-            buildSourceRecord(jo);
+            String tex = res.body().string();
+            res.close();
+            LOG.info("Recieved {}", tex);
+            return Collections.singletonList(buildSourceRecord(tex));
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
-        return null;
     }
 
     private SourceRecord buildSourceRecord(Object event) {
@@ -66,10 +67,11 @@ public class TaskClass extends SourceTask {
         Request request = new Request.Builder()
                 .url("https://sheets.googleapis.com/v4/spreadsheets/" + spreadSheetId + "/values/" + range)
                 .get()
-                .addHeader("Authorization", accessToken)
+                .addHeader("Authorization", "Bearer " + accessToken)
                 .build();
 
         Response response = client.newCall(request).execute();
+
         return response;
     }
 

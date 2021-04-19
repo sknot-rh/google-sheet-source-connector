@@ -16,18 +16,21 @@ public class GoogleSheetsSource extends SourceConnector {
     private static final Logger LOG = LoggerFactory.getLogger(GoogleSheetsSource.class);
     public static final String RANGE = "range";
     public static final String SPREAD_SHEET_ID = "spreadSheetId";
-    public static final String ACCESS_TOKEN = "acessToken";
+    public static final String ACCESS_TOKEN = "accessToken";
     public static final String TOPIC = "topics";
+    public static final String DELAY = "delay";
     private static final ConfigDef CONFIG_DEF = new ConfigDef()
             .define(RANGE, ConfigDef.Type.STRING, "0", ConfigDef.Importance.HIGH, "The range of cells to fetch.")
             .define(SPREAD_SHEET_ID, ConfigDef.Type.STRING, "0", ConfigDef.Importance.HIGH, "The id of the Spread Sheet.")
             .define(ACCESS_TOKEN, ConfigDef.Type.STRING, "0", ConfigDef.Importance.HIGH, "Access token to access Spread Sheet.")
+            .define(DELAY, ConfigDef.Type.INT, 10000, ConfigDef.Importance.HIGH, "Delay between polls")
             .define(TOPIC, ConfigDef.Type.STRING, "0", ConfigDef.Importance.HIGH, "The topic to send the records.");
 
     private String range;
     private String spreadSheetId;
     private String accessToken;
     private String topic;
+    private Integer delay;
 
     @Override
     public String version() {
@@ -41,6 +44,7 @@ public class GoogleSheetsSource extends SourceConnector {
         spreadSheetId = parsedConfig.getString(SPREAD_SHEET_ID);
         accessToken = parsedConfig.getString(ACCESS_TOKEN);
         topic = parsedConfig.getString(TOPIC);
+        delay = parsedConfig.getInt(DELAY);
     }
 
     @Override
@@ -68,6 +72,10 @@ public class GoogleSheetsSource extends SourceConnector {
 
         if (accessToken != null) {
             config.put(ACCESS_TOKEN, accessToken);
+        }
+
+        if (delay != null) {
+            config.put(DELAY, Integer.toString(delay));
         }
 
         for (int i = 0; i < maxTasks; i++) {
