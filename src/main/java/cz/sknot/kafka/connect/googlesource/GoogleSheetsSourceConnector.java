@@ -23,7 +23,7 @@ public class GoogleSheetsSourceConnector extends SourceConnector {
             .define(RANGE, ConfigDef.Type.STRING, "0", ConfigDef.Importance.HIGH, "The range of cells to fetch.")
             .define(SPREAD_SHEET_ID, ConfigDef.Type.STRING, "0", ConfigDef.Importance.HIGH, "The id of the Spread Sheet.")
             .define(ACCESS_TOKEN, ConfigDef.Type.STRING, "0", ConfigDef.Importance.HIGH, "Access token to access Spread Sheet.")
-            .define(DELAY, ConfigDef.Type.INT, 10000, ConfigDef.Importance.HIGH, "Delay between polls")
+            .define(DELAY, ConfigDef.Type.INT, 5000, ConfigDef.Importance.HIGH, "Delay between polls.")
             .define(TOPIC, ConfigDef.Type.STRING, "0", ConfigDef.Importance.HIGH, "The topic to send the records.");
 
     private String range;
