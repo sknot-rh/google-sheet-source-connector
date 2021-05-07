@@ -42,8 +42,8 @@ spec:
     value.converter: org.apache.kafka.connect.storage.StringConverter
     key.converter.schemas.enable: false
     value.converter.schemas.enable: false
-    config.providers: file
-    config.providers.file.class: org.apache.kafka.common.config.provider.FileConfigProvider
+    config.providers: directory
+    config.providers.directory.class: org.apache.kafka.common.config.provider.DirectoryConfigProvider
   logging:
     type: inline
     loggers:

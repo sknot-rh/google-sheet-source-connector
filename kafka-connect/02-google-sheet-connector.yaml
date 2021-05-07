@@ -13,6 +13,7 @@ spec:
   tasksMax: 1
   config:
     spreadSheetId: 1A-RikPJcaC3L4-pkvYyPWp6z6g98NF0r1loYTdEmnYw
-    accessToken: ${file:/opt/kafka/external-configuration/google-sheet-credentials/google-sheet.properties:token}
-    range: A1:B3
+    accessToken: ${directory:/opt/kafka/external-configuration/google-sheet-credentials:google-sheet-credentials}
+    range: A1:C3
     topics: my-topic
+    delay: 3000
