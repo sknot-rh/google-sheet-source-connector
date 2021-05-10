@@ -15,5 +15,5 @@ spec:
     spreadSheetId: 1A-RikPJcaC3L4-pkvYyPWp6z6g98NF0r1loYTdEmnYw
     accessToken: ${directory:/opt/kafka/external-configuration/google-sheet-credentials:google-sheet-credentials}
     range: A1:C3
-    topics: my-topic
+    topics: my-google-sheet-topic
     delay: 3000

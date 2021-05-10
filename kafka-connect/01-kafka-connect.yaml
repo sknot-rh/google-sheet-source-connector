@@ -19,6 +19,7 @@ spec:
         artifacts:
           - type: jar
             url: https://github.com/sknot-rh/google-sheet-source-connector/releases/download/0.0.9/google-sheet-source-connector-0.0.9.jar
+            sha512sum: 1e8746d543a80957efd71f5cc4894c32ffb2c4b660a0fcb1c936561c9f878891a20c5aceb549927bb2ee1aca90410aab407cd9590d76e5bf3934f5f11d52b048
   bootstrapServers: my-cluster-kafka-bootstrap:9093
   tls:
     trustedCertificates:
